@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ubu — あなたに合うケアを見つける</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+–cream: #FDF6F4;
+–warm-white: #FFFAFB;
+–ink: #2E1F1F;
+–ink-light: #7A5C5C;
+–gold: #C49A9A;
+–gold-light: #DBBABA;
+–rebirth: #A8C8BC;
+–rebirth-light: #C4DAD4;
+–awareness: #BFA0B4;
+–awareness-light: #D4BECE;
+–line-green: #00B900;
+}
+
+html, body {
+min-height: 100vh;
+background: linear-gradient(160deg, #FDF0F2 0%, #FDF6F4 40%, #F8F0F5 100%);
+font-family: ‘Noto Serif JP’, serif;
+color: var(–ink);
+-webkit-font-smoothing: antialiased;
+}
+
+body::before {
+content: ‘’;
+position: fixed;
+inset: 0;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’ opacity=‘0.04’/%3E%3C/svg%3E”);
+pointer-events: none;
+z-index: 999;
+opacity: 0.6;
+}
+
+.container {
+max-width: 480px;
+margin: 0 auto;
+padding: 0 20px 60px;
+position: relative;
+}
+
+.header {
+padding: 48px 0 32px;
+text-align: center;
+position: relative;
+}
+
+.logo {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 13px;
+font-weight: 300;
+letter-spacing: 0.4em;
+color: var(–gold);
+text-transform: uppercase;
+margin-bottom: 20px;
+}
+
+.header h1 {
+font-family: ‘Noto Serif JP’, serif;
+font-weight: 300;
+font-size: 22px;
+line-height: 1.7;
+letter-spacing: 0.05em;
+color: var(–ink);
+margin-bottom: 12px;
+}
+
+.header p {
+font-size: 12px;
+color: var(–ink-light);
+letter-spacing: 0.08em;
+line-height: 1.8;
+}
+
+.header-rule {
+width: 40px;
+height: 1px;
+background: var(–gold);
+margin: 20px auto 0;
+opacity: 0.6;
+}
+
+.progress-bar {
+display: flex;
+gap: 6px;
+justify-content: center;
+margin-bottom: 32px;
+}
+
+.progress-dot {
+width: 6px;
+height: 6px;
+border-radius: 50%;
+background: var(–gold-light);
+opacity: 0.3;
+transition: opacity 0.4s, transform 0.4s;
+}
+
+.progress-dot.active {
+opacity: 1;
+transform: scale(1.3);
+}
+
+.progress-dot.done {
+opacity: 0.6;
+}
+
+.card {
+background: var(–warm-white);
+border: 1px solid rgba(196, 154, 154, 0.2);
+border-radius: 2px;
+padding: 36px 28px 32px;
+position: relative;
+overflow: hidden;
+animation: slideUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes slideUp {
+from { opacity: 0; transform: translateY(16px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+.card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 2px;
+background: linear-gradient(90deg, transparent, var(–gold), transparent);
+opacity: 0.5;
+}
+
+.question-num {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 11px;
+letter-spacing: 0.3em;
+color: var(–gold);
+margin-bottom: 16px;
+text-transform: uppercase;
+}
+
+.question-text {
+font-weight: 300;
+font-size: 17px;
+line-height: 1.8;
+letter-spacing: 0.04em;
+margin-bottom: 8px;
+color: var(–ink);
+}
+
+.question-sub {
+font-size: 12px;
+color: var(–ink-light);
+line-height: 1.9;
+letter-spacing: 0.05em;
+margin-bottom: 28px;
+padding-bottom: 24px;
+border-bottom: 1px solid rgba(196,154,154,0.15);
+}
+
+.btn-group {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.btn {
+display: flex;
+align-items: center;
+gap: 14px;
+padding: 18px 20px;
+border: 1px solid rgba(196, 154, 154, 0.25);
+border-radius: 1px;
+background: transparent;
+cursor: pointer;
+text-align: left;
+transition: all 0.25s ease;
+font-family: ‘Noto Serif JP’, serif;
+position: relative;
+overflow: hidden;
+}
+
+.btn::after {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: var(–gold);
+opacity: 0;
+transition: opacity 0.25s;
+}
+
+.btn:hover {
+border-color: var(–gold);
+transform: translateX(4px);
+}
+
+.btn:hover::after { opacity: 0.04; }
+
+.btn-icon {
+font-size: 18px;
+min-width: 28px;
+text-align: center;
+position: relative;
+z-index: 1;
+}
+
+.btn-content {
+position: relative;
+z-index: 1;
+}
+
+.btn-label {
+font-size: 14px;
+font-weight: 400;
+letter-spacing: 0.05em;
+color: var(–ink);
+display: block;
+margin-bottom: 3px;
+}
+
+.btn-desc {
+font-size: 11px;
+color: var(–ink-light);
+letter-spacing: 0.04em;
+line-height: 1.6;
+}
+
+.result-card {
+border-radius: 2px;
+padding: 36px 28px 32px;
+position: relative;
+overflow: hidden;
+animation: slideUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.result-card.rebirth {
+background: var(–rebirth);
+color: #1A3028;
+}
+
+.result-card.awareness {
+background: var(–awareness);
+color: #261320;
+}
+
+.result-badge {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 11px;
+letter-spacing: 0.35em;
+text-transform: uppercase;
+opacity: 0.6;
+margin-bottom: 12px;
+}
+
+.result-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 36px;
+font-weight: 300;
+letter-spacing: 0.05em;
+margin-bottom: 4px;
+line-height: 1;
+}
+
+.result-title-jp {
+font-size: 13px;
+opacity: 0.7;
+letter-spacing: 0.15em;
+margin-bottom: 20px;
+font-weight: 300;
+}
+
+.result-rule {
+height: 1px;
+background: currentColor;
+opacity: 0.2;
+margin-bottom: 20px;
+}
+
+.result-tagline {
+font-size: 16px;
+font-weight: 300;
+line-height: 1.8;
+letter-spacing: 0.06em;
+margin-bottom: 20px;
+}
+
+.result-tagline strong {
+font-weight: 400;
+display: block;
+font-size: 18px;
+margin-bottom: 4px;
+}
+
+.result-points {
+list-style: none;
+margin-bottom: 28px;
+}
+
+.result-points li {
+font-size: 12px;
+letter-spacing: 0.05em;
+line-height: 1.9;
+opacity: 0.85;
+padding-left: 16px;
+position: relative;
+}
+
+.result-points li::before {
+content: ‘—’;
+position: absolute;
+left: 0;
+opacity: 0.5;
+}
+
+.line-btn {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+width: 100%;
+padding: 18px;
+background: var(–line-green);
+border: none;
+border-radius: 2px;
+color: white;
+font-family: ‘Noto Serif JP’, serif;
+font-size: 14px;
+font-weight: 400;
+letter-spacing: 0.12em;
+cursor: pointer;
+text-decoration: none;
+transition: opacity 0.2s, transform 0.2s;
+margin-bottom: 12px;
+}
+
+.line-btn:hover {
+opacity: 0.9;
+transform: translateY(-1px);
+}
+
+.line-icon { font-size: 18px; }
+
+.retry-btn {
+width: 100%;
+padding: 14px;
+background: transparent;
+border: 1px solid rgba(0,0,0,0.15);
+border-radius: 2px;
+color: inherit;
+font-family: ‘Noto Serif JP’, serif;
+font-size: 12px;
+letter-spacing: 0.12em;
+cursor: pointer;
+opacity: 0.6;
+transition: opacity 0.2s;
+}
+
+.retry-btn:hover { opacity: 1; }
+
+.also-consider {
+margin-top: 20px;
+padding: 16px 20px;
+border: 1px solid rgba(0,0,0,0.1);
+border-radius: 2px;
+}
+
+.also-consider p {
+font-size: 11px;
+opacity: 0.65;
+letter-spacing: 0.06em;
+line-height: 1.8;
+}
+
+.also-consider strong {
+font-size: 12px;
+opacity: 0.85;
+display: block;
+margin-bottom: 4px;
+letter-spacing: 0.08em;
+}
+
+.back-btn {
+display: flex;
+align-items: center;
+gap: 8px;
+background: none;
+border: none;
+color: var(–ink-light);
+font-family: ‘Noto Serif JP’, serif;
+font-size: 11px;
+letter-spacing: 0.1em;
+cursor: pointer;
+margin-bottom: 16px;
+padding: 0;
+opacity: 0.6;
+transition: opacity 0.2s;
+}
+
+.back-btn:hover { opacity: 1; }
+
+.footer {
+text-align: center;
+margin-top: 40px;
+opacity: 0.4;
+}
+
+.footer p {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 11px;
+letter-spacing: 0.3em;
+text-transform: uppercase;
+}
+
+.hidden { display: none !important; }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+  <header class="header">
+    <div class="logo">ubu beauty salon</div>
+    <h1>あなたに合うケアは<br>どちらですか？</h1>
+    <p>3つの質問で見つかります</p>
+    <div class="header-rule"></div>
+  </header>
+
+  <div class="progress-bar" id="progressBar">
+    <div class="progress-dot active" id="dot0"></div>
+    <div class="progress-dot" id="dot1"></div>
+    <div class="progress-dot" id="dot2"></div>
+  </div>
+
+  <!-- Q1 -->
+
+  <div id="q1">
+    <div class="card">
+      <div class="question-num">Question 01</div>
+      <div class="question-text">今、いちばん気になっているのは<br>どちらですか？</div>
+      <div class="question-sub">体の状態 / 心や思考の状態、どちらが先に浮かびますか</div>
+      <div class="btn-group">
+        <button class="btn" onclick="next('q1','A')">
+          <span class="btn-icon">🌿</span>
+          <span class="btn-content">
+            <span class="btn-label">体のこと</span>
+            <span class="btn-desc">コリ・重さ・むくみ・歪みなど</span>
+          </span>
+        </button>
+        <button class="btn" onclick="next('q1','B')">
+          <span class="btn-icon">🪞</span>
+          <span class="btn-content">
+            <span class="btn-label">自分自身のこと</span>
+            <span class="btn-desc">なんとなく疲れてる・同じことを繰り返してる気がする、など</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2A -->
+
+  <div id="q2a" class="hidden">
+    <button class="back-btn" onclick="goBack('q1', 0)">← もどる</button>
+    <div class="card">
+      <div class="question-num">Question 02</div>
+      <div class="question-text">その不調、何度か繰り返している<br>と感じますか？</div>
+      <div class="question-sub">「治ってもまた戻る」「季節ごとに同じ状態になる」など</div>
+      <div class="btn-group">
+        <button class="btn" onclick="next('q2a','A')">
+          <span class="btn-icon">🔄</span>
+          <span class="btn-content">
+            <span class="btn-label">繰り返している気がする</span>
+            <span class="btn-desc">なぜか同じ場所が気になる・また戻ってきた感じ</span>
+          </span>
+        </button>
+        <button class="btn" onclick="next('q2a','B')">
+          <span class="btn-icon">⚡</span>
+          <span class="btn-content">
+            <span class="btn-label">今の不調をまず解消したい</span>
+            <span class="btn-desc">とにかく体を楽にしたい・今日の重さをとりたい</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2B -->
+
+  <div id="q2b" class="hidden">
+    <button class="back-btn" onclick="goBack('q1', 0)">← もどる</button>
+    <div class="card">
+      <div class="question-num">Question 02</div>
+      <div class="question-text">自分の状態を「言語化」したい<br>気持ちはありますか？</div>
+      <div class="question-sub">「なぜこうなるのか知りたい」「自分のパターンに気づきたい」など</div>
+      <div class="btn-group">
+        <button class="btn" onclick="next('q2b','A')">
+          <span class="btn-icon">💬</span>
+          <span class="btn-content">
+            <span class="btn-label">ある、むしろそれが目的かも</span>
+            <span class="btn-desc">ケアしながら自分を理解したい</span>
+          </span>
+        </button>
+        <button class="btn" onclick="next('q2b','B')">
+          <span class="btn-icon">🌙</span>
+          <span class="btn-content">
+            <span class="btn-label">まずは体を整えたい</span>
+            <span class="btn-desc">考えるより感じたい・シンプルに体ケアがしたい</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+
+  <div id="q3" class="hidden">
+    <button class="back-btn" id="q3back" onclick="">← もどる</button>
+    <div class="card">
+      <div class="question-num">Question 03</div>
+      <div class="question-text">ケアの後に期待したいのは<br>どちらに近いですか？</div>
+      <div class="question-sub">直感でOK。どちらも間違いじゃないです</div>
+      <div class="btn-group">
+        <button class="btn" onclick="showResult('rebirth')">
+          <span class="btn-icon">✨</span>
+          <span class="btn-content">
+            <span class="btn-label">体が軽くなった、整った感覚</span>
+            <span class="btn-desc">見た目・感触・動きに変化を感じたい</span>
+          </span>
+        </button>
+        <button class="btn" onclick="showResult('awareness')">
+          <span class="btn-icon">🔍</span>
+          <span class="btn-content">
+            <span class="btn-label">何かに気づいた、腑に落ちた感覚</span>
+            <span class="btn-desc">「そういうことか」という内側の変化がほしい</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT: REBIRTH -->
+
+  <div id="result-rebirth" class="hidden">
+    <div class="result-card rebirth">
+      <div class="result-badge">Your menu</div>
+      <div class="result-title">rebirth</div>
+      <div class="result-title-jp">リバース・トリートメント</div>
+      <div class="result-rule"></div>
+      <div class="result-tagline">
+        <strong>整えたいなら、rebirth。</strong>
+        今の不調をちゃんと変える、<br>オールハンドのケアです。
+      </div>
+      <ul class="result-points">
+        <li>コリ・歪み・巡りをオールハンドで整える</li>
+        <li>その日の状態に合わせたオーダーメイド</li>
+        <li>体が変わることで、気分も底上げされる</li>
+        <li>外側から整えて、内側に影響を与える</li>
+      </ul>
+      <a href="https://lin.ee/NWCVY2g" class="line-btn">
+        <span class="line-icon">💬</span>
+        LINEで予約する
+      </a>
+      <button class="retry-btn" onclick="reset()">もう一度試す</button>
+      <div class="also-consider">
+        <strong>もし「繰り返す理由も知りたい」と思ったら</strong>
+        <p>awarenessは、ケア＋対話で根本のパターンに気づくセッションです。両方の組み合わせも可能です。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT: AWARENESS -->
+
+  <div id="result-awareness" class="hidden">
+    <div class="result-card awareness">
+      <div class="result-badge">Your menu</div>
+      <div class="result-title">awareness</div>
+      <div class="result-title-jp">アウェアネス</div>
+      <div class="result-rule"></div>
+      <div class="result-tagline">
+        <strong>変わりたいなら、awareness。</strong>
+        繰り返すパターンの理由に気づいて、<br>根本から変わるセッションです。
+      </div>
+      <ul class="result-points">
+        <li>ケア＋対話で、自分の状態を言語化する</li>
+        <li>思考の癖・身体の反応パターンに気づく</li>
+        <li>「なぜ繰り返すのか」の答えに近づく</li>
+        <li>内側の認識が変わることで、体も変わる</li>
+      </ul>
+      <a href="https://lin.ee/NWCVY2g" class="line-btn">
+        <span class="line-icon">💬</span>
+        LINEで予約する
+      </a>
+      <button class="retry-btn" onclick="reset()">もう一度試す</button>
+      <div class="also-consider">
+        <strong>「まず体だけ整えたい」気持ちもあるなら</strong>
+        <p>rebirthで土台を整えてから、awarenessへ進む方も多いです。どちらから始めるか、LINEで相談もできます。</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>ubu beauty salon — Yonago, Tottori</p>
+  </footer>
+
+</div>
+
+<script>
+  let prevQ2 = null;
+
+  function showOnly(id) {
+    const screens = ['q1','q2a','q2b','q3','result-rebirth','result-awareness'];
+    screens.forEach(s => document.getElementById(s).classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateProgress(step) {
+    for (let i = 0; i < 3; i++) {
+      const dot = document.getElementById('dot' + i);
+      dot.classList.remove('active', 'done');
+      if (i < step) dot.classList.add('done');
+      if (i === step) dot.classList.add('active');
+    }
+  }
+
+  function next(from, answer) {
+    if (from === 'q1') {
+      if (answer === 'A') { showOnly('q2a'); prevQ2 = 'q2a'; }
+      else               { showOnly('q2b'); prevQ2 = 'q2b'; }
+      updateProgress(1);
+    } else if (from === 'q2a') {
+      if (answer === 'A') {
+        document.getElementById('q3back').onclick = () => goBack('q2a', 1);
+        showOnly('q3'); updateProgress(2);
+      } else { showResult('rebirth'); }
+    } else if (from === 'q2b') {
+      if (answer === 'A') { showResult('awareness'); }
+      else {
+        document.getElementById('q3back').onclick = () => goBack('q2b', 1);
+        showOnly('q3'); updateProgress(2);
+      }
+    }
+  }
+
+  function goBack(to, step) {
+    showOnly(to);
+    updateProgress(step);
+  }
+
+  function showResult(type) {
+    document.getElementById('progressBar').style.display = 'none';
+    if (type === 'rebirth') showOnly('result-rebirth');
+    else showOnly('result-awareness');
+  }
+
+  function reset() {
+    document.getElementById('progressBar').style.display = 'flex';
+    showOnly('q1');
+    updateProgress(0);
+    prevQ2 = null;
+  }
+</script>
+
+</body>
+</html>
